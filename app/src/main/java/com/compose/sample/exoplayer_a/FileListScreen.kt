@@ -14,9 +14,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
@@ -47,55 +51,52 @@ fun FileListScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
 
-                Text(text = file.filename, modifier = Modifier
-                    .draggable(orientation = Orientation.Horizontal,
-                        state = rememberDraggableState { delta ->
-                            if (delta < 0) {
-                                offsetX = delta
-                                if (delta < -70f) {
-                                    isDel = true
+                Text(text = file.filename,
+                    modifier = Modifier
+                        .draggable(orientation = Orientation.Horizontal,
+                            state = rememberDraggableState { delta ->
+                                if (delta < 0) {
+                                    offsetX = delta
+                                    if (delta < -70f) {
+                                        isDel = true
+                                    }
+                                } else if (delta > 50) {
+                                    isDel = false
                                 }
-                            } else if (delta > 50) {
-                                isDel = false
-                            }
-                        })
-                    .weight(1f)
-                    .clickable {
-                        onFileClick(file.filePath)
-                    }
-                    .padding(5.dp))
+                            })
+                        .weight(1f)
+                        .clickable {
+                            onFileClick(file.filePath)
+                        }
+                        .padding(5.dp))
 
                 AnimatedVisibility(visible = isDel) {
-                    TextButton(onClick = {
+                    IconButton(onClick = {
                         showDelDialog = true
                     }) {
-                        Text(text = "Delete")
+                        Icon(imageVector = Icons.Default.Delete, contentDescription = null)
                     }
                 }
                 if (showDelDialog) {
-                    AlertDialog(
-                        onDismissRequest = {
+                    AlertDialog(onDismissRequest = {
+                        showDelDialog = false
+                    }, confirmButton = {
+                        TextButton(onClick = {
+                            onDeleteFileClick(file.filePath)
                             showDelDialog = false
-                        },
-                        confirmButton = {
-                            TextButton(onClick = {
-                                onDeleteFileClick(file.filePath)
-                                showDelDialog = false
-                            }) {
-                                Text(text = "Confirm")
-                            }
-                        },
-                        dismissButton = {
-                            TextButton(onClick = {
-                                showDelDialog = false
-                            }) {
-                                Text(text = "Cancel")
-                            }
-                        },
-                        title = {
-                            Text(text = "Delete File")
+                        }) {
+                            Text(text = "Confirm")
                         }
-                    )
+                    }, dismissButton = {
+                        TextButton(onClick = {
+                            showDelDialog = false
+                            isDel = false
+                        }) {
+                            Text(text = "Cancel")
+                        }
+                    }, title = {
+                        Text(text = "Delete File")
+                    })
                 }
             }
             Divider()

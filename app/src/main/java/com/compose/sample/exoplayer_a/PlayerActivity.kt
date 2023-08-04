@@ -15,18 +15,14 @@
  */
 package com.compose.sample.exoplayer_a
 
-import android.Manifest
 import android.os.Bundle
-import android.os.Environment.getExternalStorageDirectory
 import android.view.View
-import android.webkit.WebChromeClient.FileChooserParams
 import androidx.activity.ComponentActivity
 import com.compose.sample.exoplayer_a.databinding.ActivityPlayerBinding
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.util.MimeTypes
 import com.google.android.exoplayer2.util.Util
-import java.io.File
 
 /**
  * A fullscreen activity to play audio or video streams.
